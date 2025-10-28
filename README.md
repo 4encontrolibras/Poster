@@ -1,1 +1,87 @@
-# Poster
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Avaliação de Pôsteres</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  .poster { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; }
+  iframe { width: 100%; height: 400px; }
+  label { display: block; margin: 5px 0; }
+  textarea { width: 100%; }
+  button { margin-top: 10px; padding: 5px 10px; }
+</style>
+</head>
+<body>
+
+<h1>Avaliação de Pôsteres</h1>
+
+<script>
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx8IHaq5ATGucOtjYwCqoHu9BhHg_LGuTjdV0V_Gsb4Oey5qj1wuuJYrcHvAEw_UWF8/exec';
+
+function enviar(e, id) {
+  e.preventDefault();
+  const form = document.getElementById('form' + id);
+  const data = {
+    id: id,
+    status: form.status.value,
+    observacoes: form.observacoes.value,
+    avaliador: form.avaliador.value
+  };
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }).then(res => {
+    if(res.ok) alert('Avaliação enviada!');
+    else alert('Erro ao enviar.');
+    form.reset();
+  });
+}
+
+const posters = [
+  {id:1, title:"Avaliação 1", pdf:"https://drive.google.com/file/d/1JRQbsrKX5K27727N00cTWVis89fo_2zh/preview"},
+  {id:2, title:"Avaliação 2", pdf:"https://drive.google.com/file/d/1X5N8tVWpNOo9DVE1vlrb8sWK_qDAMHNG/preview"},
+  {id:3, title:"Avaliação 3", pdf:"https://drive.google.com/file/d/1WqOrFDb-9CW0xQPhbFuFr7WPljdVnS4x/preview"},
+  {id:4, title:"Avaliação 4", pdf:"https://drive.google.com/file/d/1Wyf1n7r1gR__XdRNh6O6KuHwsZAG-SYT/preview"},
+  {id:5, title:"Avaliação 5", pdf:"https://drive.google.com/file/d/1RqCa2_JeMMb84ILoQhdcakEyT2Ky_Xbe/preview"},
+  {id:6, title:"Avaliação 6", pdf:"https://drive.google.com/file/d/1RnztRKmd_Fouqoz8Ldv2Kew_B8fuZY2S/preview"},
+  {id:7, title:"Avaliação 7", pdf:"https://drive.google.com/file/d/1NCw0M4zOuq8o08Sac78Jzk0j-udLehba/preview"},
+  {id:8, title:"Avaliação 8", pdf:"https://drive.google.com/file/d/14vtufpLSserpdSAoNGf-FMbTd6cEN6ks/preview"},
+  {id:9, title:"Avaliação 9", pdf:"https://drive.google.com/file/d/1szz3zabexXM79rc-ZW1OPz3P_qrTWfk0/preview"},
+  {id:10, title:"Avaliação 10", pdf:"https://drive.google.com/file/d/1g7QmIQNmtUuKpb0S_o3fHtcr8mEyV5u5/preview"},
+  {id:11, title:"Avaliação 11", pdf:"https://drive.google.com/file/d/1wykNGVmsMuRnV3Wx8Kzf4nhl5dw3pImf/preview"},
+  {id:12, title:"Avaliação 12", pdf:"https://drive.google.com/file/d/1_UzemVbx0iN_jMdqbsVzuV7a7J0COF3s/preview"},
+  {id:13, title:"Avaliação 13", pdf:"https://drive.google.com/file/d/1dTsScmqgSHddA93ob9jowluyGt6beWsJ/preview"}
+];
+
+const avaliadores = ["Ana Regina", "Fernanda Soares", "Heloise Gripp", "Priscilla Cavalcante"];
+
+posters.forEach(poster => {
+  const div = document.createElement('div');
+  div.className = 'poster';
+  div.innerHTML = `
+    <h2>${poster.title}</h2>
+    <iframe src="${poster.pdf}"></iframe>
+    <form id="form${poster.id}" onsubmit="enviar(event, ${poster.id})">
+      <label>
+        <input type="radio" name="status" value="Aprovado" required> Aprovado
+        <input type="radio" name="status" value="Aprovado com correcoes"> Aprovado com correções
+        <input type="radio" name="status" value="Reprovado"> Reprovado
+      </label>
+      <label>Observações:</label>
+      <textarea name="observacoes"></textarea>
+      <label>Avaliador:
+        <select name="avaliador" required>
+          <option value="">Selecione</option>
+          ${avaliadores.map(a => `<option>${a}</option>`).join('')}
+        </select>
+      </label>
+      <button type="submit">Enviar</button>
+    </form>
+  `;
+  document.body.appendChild(div);
+});
+</script>
+
+</body>
+</html>
